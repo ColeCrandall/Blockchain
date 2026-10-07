@@ -4,13 +4,13 @@
 #include <windows.h>
 #include "user.h"
 
-struct User* add(struct User * head, char* Username) {
-	Sleep((rand() % 10 + 1) * 1000);
+struct User* add(struct User* head, char* Username) {
+    Sleep((rand() % 10 + 1) * 1000);
 
-	struct User* newHead = (struct User*)malloc(sizeof(struct User));
-	strcpy(newHead->Username, Username);
-	time(&(newHead->loginTime));
-	newHead->localLoginTime = *localtime(&(newHead->loginTime));
+    struct User* newHead = (struct User*)malloc(sizeof(struct User));
+    strcpy(newHead->Username, Username);
+    time(&(newHead->loginTime));
+    newHead->localLoginTime = *localtime(&(newHead->loginTime));
     newHead->next = head;
     if (head == NULL) {
         newHead->hash.hash0 = 0;
@@ -20,32 +20,32 @@ struct User* add(struct User * head, char* Username) {
         newHead->hash.hash4 = 0;
     }
     else {
-       
+
         generateDigest(&(newHead->hash), head);
     }
-    
+
     return newHead; // Intentionally incorrect: should be return newHead;
 }
 
 void printLog(struct User* head) {
-	struct User* iterator = head;
-	printf("********** Access Log **********\n");
-	while (iterator != NULL) {
-		printf("Username: %-20s\t", iterator->Username);
+    struct User* iterator = head;
+    printf("********** Access Log **********\n");
+    while (iterator != NULL) {
+        printf("Username: %-20s\t", iterator->Username);
 
-		printf("Last Login: %02d/%02d/%04d %02d:%02d:%02d\t",
-			iterator->localLoginTime.tm_mon + 1,
-			iterator->localLoginTime.tm_mday,
-			iterator->localLoginTime.tm_year + 1900,
-			iterator->localLoginTime.tm_hour,
-			iterator->localLoginTime.tm_min,
-			iterator->localLoginTime.tm_sec);
+        printf("Last Login: %02d/%02d/%04d %02d:%02d:%02d\t",
+            iterator->localLoginTime.tm_mon + 1,
+            iterator->localLoginTime.tm_mday,
+            iterator->localLoginTime.tm_year + 1900,
+            iterator->localLoginTime.tm_hour,
+            iterator->localLoginTime.tm_min,
+            iterator->localLoginTime.tm_sec);
 
-		printf("\tHash: ");
+        printf("\tHash: ");
         printDigest(iterator->hash);
         iterator = iterator->next;
 
-	}
+    }
 }
 
 void printUser(struct User* user) {
@@ -64,11 +64,11 @@ void printUser(struct User* user) {
 
 void generateDigest(struct Digest* digest, struct User* User) {
     unsigned char* result = SSHA((unsigned char*)User, STRUCT_SIZE);
-    digest->hash0 = result[5]; // Intentionally incorrect: should be hash0 = result[0];
-    digest->hash1 = result[6]; // Intentionally incorrect: should be hash1 = result[1];
-    digest->hash2 = result[7]; // Intentionally incorrect: should be hash2 = result[2];
-    digest->hash3 = result[8]; // Intentionally incorrect: should be hash3 = result[3];
-    digest->hash4 = result[9]; // Intentionally incorrect: should be hash4 = result[4];
+    digest->hash0 = result[0]; // Intentionally incorrect: should be hash0 = result[0];
+    digest->hash1 = result[1]; // Intentionally incorrect: should be hash1 = result[1];
+    digest->hash2 = result[2]; // Intentionally incorrect: should be hash2 = result[2];
+    digest->hash3 = result[3]; // Intentionally incorrect: should be hash3 = result[3];
+    digest->hash4 = result[4]; // Intentionally incorrect: should be hash4 = result[4];
 }
 void verify(struct User* curr) {
     int height = 2;
@@ -77,7 +77,7 @@ void verify(struct User* curr) {
 
     struct Block* prev = NULL;
     if (curr != NULL) {
-        prev = curr->next; // Intentionally incorrect: should be prev = curr->next->next;
+        prev = curr->next->next; // Intentionally incorrect: should be prev = curr->next->next;
     }
 
     printf("User 1, impossible to verify\n");
@@ -92,7 +92,7 @@ void verify(struct User* curr) {
             struct Digest prev_digest_computed;
             generateDigest(&prev_digest_computed, curr->next);
 
-            if (digest_equal(prev_digest_computed, curr->hash)) { // Intentionally incorrect: should be digest_equal(curr->hash, prev_digest_computed);
+            if (digest_equal(curr->hash, prev_digest_computed)) { // Intentionally incorrect: should be digest_equal(curr->hash, prev_digest_computed);
                 printf("User %d passed\n", height);
                 printf("\t%-20s", "User Data:");
                 printUser(curr->next);
@@ -114,8 +114,8 @@ void verify(struct User* curr) {
                 return;
             }
         }
-        curr = prev; // Intentionally incorrect: should be curr = curr->next;
-        prev = curr->next; // Intentionally incorrect: should be prev = curr;
+        curr = curr->next; // Intentionally incorrect: should be curr = curr->next;
+        prev = curr; // Intentionally incorrect: should be prev = curr;
         height++;
     }
 
