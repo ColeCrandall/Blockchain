@@ -10,10 +10,10 @@ unsigned char* SSHA(const unsigned char* msg, size_t length) {
 
     for (int i = 0; i < length; i++) {
         for (int round = 0; round < 8; round++) {
-            unsigned char g = (B & C) | (C & D);
+            unsigned char g = ((B >> 1) & C) | (C & D);
             unsigned char old_A = A;
             A = A + 1; // Non-destructive replacement of bitshift
-            B = B ^ msg[i]; // Non-destructive replacement of bitshift
+            B >> 1; // Non-destructive replacement of bitshift
             E = (g + msg[i] + B);
             D = A ^ B;
             C = (A + E);
