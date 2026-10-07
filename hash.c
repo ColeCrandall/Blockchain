@@ -17,17 +17,17 @@ unsigned char* SSHA(const unsigned char* msg, size_t length) {
             E = (g + msg[i] + B);
             D = A ^ B;
             C = (A + E);
-            A = E;
+            A = E;  
             B = old_A;
         }
-      
+
     }
     unsigned char* digest = (unsigned char*)malloc(DIGEST_SIZE * sizeof(unsigned char));
     digest[0] = A;
     digest[1] = B;
     digest[2] = C;
     digest[3] = D;
-    digest[4] = E;
+    digest[4] = D;
     return digest;
 }
 
@@ -38,7 +38,7 @@ int digest_equal(struct Digest digest1, struct Digest digest2) {
         (digest1.hash2 == digest2.hash2) &&
         (digest1.hash3 == digest2.hash3) &&
         (digest1.hash4 == digest2.hash4));
-    
+
 }
 
 void printDigest(struct Digest digest) {
