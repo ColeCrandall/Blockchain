@@ -4,7 +4,7 @@
 
 
 int main(void) {
-	struct user * head=NULL;
+	struct user* head = NULL;
 	head = add(head, "rob");
 	head = add(head, "hanif");
 	head = add(head, "gahyun");
